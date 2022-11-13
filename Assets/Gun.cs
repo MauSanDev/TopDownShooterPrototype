@@ -73,7 +73,7 @@ public class Gun : MonoBehaviour
         
         CurrentState.Update(Time.deltaTime);
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && !Cartridge.IsCartridgeFull)
         {
             TransitionToState(GunStates.Reloading);
             return;
@@ -90,7 +90,6 @@ public class Gun : MonoBehaviour
         Cartridge.Consume();
         
         Vector3 mouseDelta = GetMouseDelta();
-        
         Bullet instance = Instantiate(bulletPrefab, shootPoint.position, quaternion.identity);
 
         Vector3 direction = mouseDelta - transform.position;

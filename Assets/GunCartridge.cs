@@ -6,10 +6,11 @@ public class GunCartridge
     private int totalBullets = 0;
     
     private int currentBullets = 0;
-
-
+    
     public bool HasBulletsToShot => currentBullets > 0;
     public bool HasBulletsToLoad => totalBullets > 0;
+
+    public bool IsCartridgeFull => currentBullets == bulletsPerCartridge || totalBullets == 0;
     
     public GunCartridge(int bulletsPerCartridge, int totalBullets)
     {
