@@ -2,37 +2,62 @@
 
 public class GunCartridge
 {
-    private int bulletsPerCartridge = 0;
-    private int totalBullets = 0;
+    private AmountStack cartridgeBullets;
+    private AmountStack totalBullets;
     
-    private int currentBullets = 0;
-    
-    public bool HasBulletsToShot => currentBullets > 0;
-    public bool HasBulletsToLoad => totalBullets > 0;
+    public bool HasBulletsToShot => cartridgeBullets.RemainingAmount > 0;
+    public bool HasBulletsToLoad => cartridgeBullets.RemainingAmount > 0;
 
-    public bool IsCartridgeFull => currentBullets == bulletsPerCartridge || totalBullets == 0;
+    public bool IsCartridgeFull => cartridgeBullets.IsFull || totalBullets.IsEmpty;
     
     public GunCartridge(int bulletsPerCartridge, int totalBullets)
     {
-        this.bulletsPerCartridge = bulletsPerCartridge;
-        this.totalBullets = totalBullets;
+        this.totalBullets = new AmountStack(totalBullets);
+        cartridgeBullets = new AmountStack(bulletsPerCartridge);
         Reload();
     }
 
     public void Consume(int amount = 1)
     {
-        currentBullets = Mathf.Max(0, currentBullets - amount);
+        cartridgeBullets.Substract(amount);
+        Debug.Log($"Remaining :: Cartridge: {cartridgeBullets} - Total {totalBullets}");
     }
 
     public void Reload()
     {
-        if (currentBullets == bulletsPerCartridge || totalBullets == 0)
-        {
-            return;
-        }
+        int toLoad = totalBullets.Substract(cartridgeBullets.Difference);
+        cartridgeBullets.Add(toLoad);
+    }
+}
 
-        int diff = Mathf.Min(totalBullets, bulletsPerCartridge - currentBullets);
-        totalBullets -= diff;
-        currentBullets = Mathf.Min(diff,bulletsPerCartridge);
+public class AmountStack
+{
+    private int remainingAmount = 0;
+    private int originalAmount = 0;
+
+    public AmountStack(int totalAmount)
+    {
+        originalAmount = totalAmount;
+        Refill();
+    }
+
+    public void Refill() => remainingAmount = originalAmount;
+    public void Add(int amount) => remainingAmount = Mathf.Min(originalAmount, remainingAmount + amount);
+
+    public int RemainingAmount => remainingAmount;
+    public int TotalCapacity => originalAmount;
+    public int Difference => originalAmount - remainingAmount;
+
+    public bool IsFull => remainingAmount == originalAmount;
+    public bool IsEmpty => remainingAmount == 0;
+
+    public override string ToString() => $"{remainingAmount}/{originalAmount}";
+
+    public int Substract(int amount)
+    {
+        int toReturn = Mathf.Min(remainingAmount, amount);
+        remainingAmount -= toReturn;
+
+        return toReturn;
     }
 }

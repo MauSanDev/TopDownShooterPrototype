@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 41441409}
   - component: {fileID: 41441410}
+  - component: {fileID: 41441411}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -169,13 +170,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shootPoint: {fileID: 1486988315}
-  bulletPrefab: {fileID: -2752585104193904940, guid: 5d20aed2f6f03224783ee0a01863557e, type: 3}
   bulletSpeed: 20
-  cooldownBetweenShots: 0.1
-  reloadCooldown: 3
+  reloadCooldown: 1
   bulletsPerCartridge: 100
   totalBullets: 500
+  shootingStrategy: {fileID: 41441411}
   precisionMargin: 4.82
+--- !u!114 &41441411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41441408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20b793dba78b4a1382d72a7f63d0ced9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldownBetweenShots: 0.05
+  bulletPrefab: {fileID: -2752585104193904940, guid: 5d20aed2f6f03224783ee0a01863557e, type: 3}
 --- !u!1 &68310003
 GameObject:
   m_ObjectHideFlags: 0
