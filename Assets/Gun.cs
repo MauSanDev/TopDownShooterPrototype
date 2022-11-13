@@ -10,8 +10,18 @@ public class Gun : MonoBehaviour
     [Header("Gun Configuration")] 
     [SerializeField] private float cooldownBetweenShots = .2f;
     [SerializeField] private bool resetCooldownOnShotRelease = false;
+    [SerializeField] private int catridgeBullets = 10;
+    [SerializeField] private float refillCooldown = 3f;
 
+    private bool isRefilling = false;
+    private float refillTimer = 0;
     private float cooldownTimer = 0;
+    private int currentBullets = 0;
+
+    private void Awake()
+    {
+        currentBullets = catridgeBullets;
+    }
 
     private void Update()
     {
@@ -22,6 +32,35 @@ public class Gun : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0, 0, angle);
 
+        if (isRefilling)
+        {
+            Debug.Log("Refilling...");
+            refillTimer -= Time.deltaTime;
+
+            if (refillTimer <= 0)
+            {
+                isRefilling = false;
+                currentBullets = catridgeBullets;
+                Debug.Log("Bullets Refilled");
+            }
+            return;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            isRefilling = true;
+            refillTimer = refillCooldown;
+            return;
+        }
+        
+        
+        if (currentBullets == 0)
+        {
+            Debug.LogWarning("You don't have bullets, press R");
+            
+            return;
+        }
+        
 
         if (Input.GetMouseButtonUp(0) && resetCooldownOnShotRelease)
         {
@@ -50,5 +89,6 @@ public class Gun : MonoBehaviour
         instance.Shot(direction, bulletSpeed);
 
         cooldownTimer = cooldownBetweenShots;
+        currentBullets--;
     }
 }
