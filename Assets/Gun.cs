@@ -92,10 +92,11 @@ public class Gun : MonoBehaviour
         Cartridge.Consume();
         
         Vector3 direction = GetMouseDelta();
-        
 
-        direction = new Vector3(direction.x * UnityEngine.Random.Range(1, precisionMargin),
-            direction.y * UnityEngine.Random.Range(1, precisionMargin), 1);
+        float newX = direction.x * UnityEngine.Random.Range(1, precisionMargin);
+        float newY = direction.y * UnityEngine.Random.Range(1, precisionMargin);
+
+        direction = new Vector3(newX, newY, 1);
         
         Bullet instance = Instantiate(bulletPrefab, shootPoint.position, quaternion.identity);
 

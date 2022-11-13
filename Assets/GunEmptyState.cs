@@ -8,6 +8,13 @@ public class GunEmptyState : AbstractGunState
 
     public override void Shot()
     {
-        Debug.LogWarning(Gun.Cartridge.HasBulletsToLoad ? "You need to recharge!" : "You don't have more shots!");
+        if (Gun.Cartridge.HasBulletsToLoad)
+        {
+            Gun.TransitionToState(Gun.GunStates.Reloading);
+        }
+        else
+        {
+            Debug.LogWarning("You don't have more shots!");
+        }
     }
 }
