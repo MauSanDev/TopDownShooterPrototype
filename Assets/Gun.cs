@@ -10,8 +10,10 @@ public class Gun : MonoBehaviour
 
     [Header("Gun Configuration")] 
     [SerializeField] private float cooldownBetweenShots = .2f;
-    [SerializeField] private int catridgeBullets = 10;
-    [SerializeField] private float refillCooldown = 3f;
+    [SerializeField] private float reloadCooldown = 3f;
+    [SerializeField] private int bulletsPerCartridge = 10;
+    [SerializeField] private int totalBullets = 10;
+    [SerializeField][Range(1,10)] private float precisionMargin = 1.4f;
     
     
     public GunCartridge Cartridge { get; private set; }
@@ -32,7 +34,7 @@ public class Gun : MonoBehaviour
         states = new Dictionary<GunStates, AbstractGunState>()
         {
             {GunStates.ReadyToShot, new GunShootingState(cooldownBetweenShots)},
-            {GunStates.Reloading, new GunReloadingState(refillCooldown)},
+            {GunStates.Reloading, new GunReloadingState(reloadCooldown)},
             {GunStates.Empty, new GunEmptyState()}
         };
     }
@@ -40,7 +42,7 @@ public class Gun : MonoBehaviour
     
     private void Awake()
     {
-        Cartridge = new GunCartridge(catridgeBullets, 100);
+        Cartridge = new GunCartridge(bulletsPerCartridge, totalBullets);
 
         DefineStates();
         TransitionToState(GunStates.ReadyToShot);
@@ -55,7 +57,9 @@ public class Gun : MonoBehaviour
     private Vector3 GetMouseDelta()
     {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        return mousePos - transform.position;
+        Vector3 direction = mousePos - transform.position;
+        
+        return direction;
     }
 
     public void TransitionToState(GunStates newState)
@@ -89,10 +93,14 @@ public class Gun : MonoBehaviour
     {
         Cartridge.Consume();
         
-        Vector3 mouseDelta = GetMouseDelta();
+        Vector3 direction = GetMouseDelta();
+        
+
+        direction = new Vector3(direction.x * UnityEngine.Random.Range(1, precisionMargin),
+            direction.y * UnityEngine.Random.Range(1, precisionMargin), 1);
+        
         Bullet instance = Instantiate(bulletPrefab, shootPoint.position, quaternion.identity);
 
-        Vector3 direction = mouseDelta - transform.position;
         direction.Normalize();
         instance.Shot(direction, bulletSpeed);
     }
