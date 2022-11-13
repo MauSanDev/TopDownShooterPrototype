@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -9,86 +10,91 @@ public class Gun : MonoBehaviour
 
     [Header("Gun Configuration")] 
     [SerializeField] private float cooldownBetweenShots = .2f;
-    [SerializeField] private bool resetCooldownOnShotRelease = false;
     [SerializeField] private int catridgeBullets = 10;
     [SerializeField] private float refillCooldown = 3f;
+    
+    
+    public GunCartridge Cartridge { get; private set; }
+    
+    public enum GunStates
+    {
+        ReadyToShot,
+        Reloading,
+        Empty
+    }
 
-    private bool isRefilling = false;
-    private float refillTimer = 0;
-    private float cooldownTimer = 0;
-    private int currentBullets = 0;
+    private Dictionary<GunStates, AbstractGunState> states = new Dictionary<GunStates, AbstractGunState>();
 
+    private AbstractGunState CurrentState { get; set; }
+
+    private void DefineStates()
+    {
+        states = new Dictionary<GunStates, AbstractGunState>()
+        {
+            {GunStates.ReadyToShot, new GunShootingState(cooldownBetweenShots)},
+            {GunStates.Reloading, new GunReloadingState(refillCooldown)},
+            {GunStates.Empty, new GunEmptyState()}
+        };
+    }
+    
+    
     private void Awake()
     {
-        currentBullets = catridgeBullets;
+        Cartridge = new GunCartridge(catridgeBullets, 100);
+
+        DefineStates();
+        TransitionToState(GunStates.ReadyToShot);
     }
+    
+    private void RotateGun(Vector3 mouseDelta)
+    {
+        float angle = Mathf.Atan2 (mouseDelta.y, mouseDelta.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+    }
+
+    private Vector3 GetMouseDelta()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        return mousePos - transform.position;
+    }
+
+    public void TransitionToState(GunStates newState)
+    {
+        CurrentState = states[newState];
+        CurrentState.Setup(this);
+    }
+    
 
     private void Update()
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 mouseDelta = mousePos - transform.position;
-
-        float angle = Mathf.Atan2 (mouseDelta.y, mouseDelta.x) * Mathf.Rad2Deg;
-
-        transform.rotation = Quaternion.Euler(0, 0, angle);
-
-        if (isRefilling)
-        {
-            Debug.Log("Refilling...");
-            refillTimer -= Time.deltaTime;
-
-            if (refillTimer <= 0)
-            {
-                isRefilling = false;
-                currentBullets = catridgeBullets;
-                Debug.Log("Bullets Refilled");
-            }
-            return;
-        }
+        Vector3 mouseDelta = GetMouseDelta();
         
+        RotateGun(mouseDelta);
+        
+        CurrentState.Update(Time.deltaTime);
+
         if (Input.GetKeyDown(KeyCode.R))
         {
-            isRefilling = true;
-            refillTimer = refillCooldown;
+            TransitionToState(GunStates.Reloading);
             return;
         }
-        
-        
-        if (currentBullets == 0)
-        {
-            Debug.LogWarning("You don't have bullets, press R");
-            
-            return;
-        }
-        
-
-        if (Input.GetMouseButtonUp(0) && resetCooldownOnShotRelease)
-        {
-            cooldownTimer = 0;
-        }
-        
-        if (cooldownTimer > 0)
-        {
-            cooldownTimer -= Time.deltaTime;
-            return;
-        }
-        
 
         if (Input.GetMouseButton(0))
         {
-            ShotBullet(mouseDelta);
+            CurrentState.Shot();
         }
     }
 
-    public void ShotBullet(Vector3 mouseDelta)
+    public void ShotBullet()
     {
+        Cartridge.Consume();
+        
+        Vector3 mouseDelta = GetMouseDelta();
+        
         Bullet instance = Instantiate(bulletPrefab, shootPoint.position, quaternion.identity);
 
         Vector3 direction = mouseDelta - transform.position;
         direction.Normalize();
         instance.Shot(direction, bulletSpeed);
-
-        cooldownTimer = cooldownBetweenShots;
-        currentBullets--;
     }
 }
