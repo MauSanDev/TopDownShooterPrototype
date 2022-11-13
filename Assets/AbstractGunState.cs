@@ -1,10 +1,9 @@
-﻿
-public abstract class AbstractGunState
+﻿public abstract class AbstractGunState : IGunState
 {
-    protected Gun Gun { get; private set; }
+    public Gun Gun { get; set; }
 
-    public abstract void Update(float deltaTime);
-    protected abstract void RefreshState();
+    public abstract void UpdateState(float deltaTime);
+    public abstract void RefreshState();
     
     public void Setup(Gun gun)
     {

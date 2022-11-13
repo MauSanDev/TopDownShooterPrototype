@@ -23,12 +23,12 @@ public class GunReloadingState : AbstractGunState
         Gun.TransitionToState(Gun.GunStates.ReadyToShot);
     }
     
-    public override void Update(float deltaTime)
+    public override void UpdateState(float deltaTime)
     {
         refillTimer.Update(deltaTime);
     }
 
-    protected override void RefreshState()
+    public override void RefreshState()
     {
         refillTimer.ResetTimer();
     }

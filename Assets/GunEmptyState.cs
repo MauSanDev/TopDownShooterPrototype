@@ -2,9 +2,9 @@
 
 public class GunEmptyState : AbstractGunState
 {
-    public override void Update(float deltaTime) { }
+    public override void UpdateState(float deltaTime) { }
 
-    protected override void RefreshState() { }
+    public override void RefreshState() { }
 
     public override void Shot()
     {

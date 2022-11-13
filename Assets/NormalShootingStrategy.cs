@@ -1,18 +1,23 @@
-﻿public class GunShootingState : AbstractGunState
+﻿using UnityEngine;
+
+public class NormalShootingStrategy : AbstractShootingStrategy
 {
+    [SerializeField] private float cooldownBetweenShots = .2f;
+    [SerializeField] private Bullet bulletPrefab;
+    
     private MiniTimer cooldownTimer;
 
-    public GunShootingState(float cooldownBetweenBullets)
+    private void Awake()
     {
-        cooldownTimer = new MiniTimer(cooldownBetweenBullets);
+        cooldownTimer = new MiniTimer(cooldownBetweenShots);
     }
 
-    protected override void RefreshState()
+    public override void RefreshState()
     {
         Gun.Cartridge.Reload();
     }
-    
-    public override void Update(float deltaTime)
+
+    public override void UpdateState(float deltaTime)
     {
         cooldownTimer.Update(deltaTime);
     }
@@ -24,7 +29,7 @@
             return;
         }
         
-        Gun.ShotBullet();
+        Gun.ShotBullet(bulletPrefab);
         cooldownTimer.ResetTimer();
         
         if (!Gun.Cartridge.HasBulletsToShot)

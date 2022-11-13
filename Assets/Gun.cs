@@ -5,16 +5,16 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     [SerializeField] private Transform shootPoint = null;
-    [SerializeField] private Bullet bulletPrefab = null;
     [SerializeField] private float bulletSpeed;
 
     [Header("Gun Configuration")] 
-    [SerializeField] private float cooldownBetweenShots = .2f;
     [SerializeField] private float reloadCooldown = 3f;
     [SerializeField] private int bulletsPerCartridge = 10;
     [SerializeField] private int totalBullets = 10;
+    [SerializeField] private AbstractShootingStrategy shootingStrategy;
     [SerializeField][Range(1,10)] private float precisionMargin = 1.4f;
     
+    private Dictionary<GunStates, IGunState> gunStates = new Dictionary<GunStates, IGunState>();
     
     public GunCartridge Cartridge { get; private set; }
     
@@ -25,15 +25,13 @@ public class Gun : MonoBehaviour
         Empty
     }
 
-    private Dictionary<GunStates, AbstractGunState> states = new Dictionary<GunStates, AbstractGunState>();
-
-    private AbstractGunState CurrentState { get; set; }
+    private IGunState CurrentState { get; set; }
 
     private void DefineStates()
     {
-        states = new Dictionary<GunStates, AbstractGunState>()
+        gunStates = new Dictionary<GunStates, IGunState>()
         {
-            {GunStates.ReadyToShot, new GunShootingState(cooldownBetweenShots)},
+            {GunStates.ReadyToShot, shootingStrategy},
             {GunStates.Reloading, new GunReloadingState(reloadCooldown)},
             {GunStates.Empty, new GunEmptyState()}
         };
@@ -64,7 +62,7 @@ public class Gun : MonoBehaviour
 
     public void TransitionToState(GunStates newState)
     {
-        CurrentState = states[newState];
+        CurrentState = gunStates[newState];
         CurrentState.Setup(this);
     }
     
@@ -75,7 +73,7 @@ public class Gun : MonoBehaviour
         
         RotateGun(mouseDelta);
         
-        CurrentState.Update(Time.deltaTime);
+        CurrentState.UpdateState(Time.deltaTime);
 
         if (Input.GetKeyDown(KeyCode.R) && !Cartridge.IsCartridgeFull)
         {
@@ -89,7 +87,7 @@ public class Gun : MonoBehaviour
         }
     }
 
-    public void ShotBullet()
+    public void ShotBullet(Bullet bulletPrefab)
     {
         Cartridge.Consume();
         
