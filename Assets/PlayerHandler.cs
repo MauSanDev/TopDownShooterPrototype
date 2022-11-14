@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour, IInputListener
+public class PlayerHandler : MonoBehaviour, IInputListener
 {
     [Header("Modifiers")]
     [SerializeField] private float movementSpeed = 10;
