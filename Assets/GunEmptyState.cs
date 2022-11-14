@@ -6,7 +6,7 @@ public class GunEmptyState : AbstractGunState
 
     public override void RefreshState() { }
 
-    public override void Shot()
+    public override void OnActionExecuted()
     {
         if (Gun.Cartridge.HasBulletsToLoad)
         {
@@ -16,5 +16,10 @@ public class GunEmptyState : AbstractGunState
         {
             Debug.LogWarning("You don't have more shots!");
         }
+    }
+
+    public override void OnActionReleased()
+    {
+        throw new System.NotImplementedException();
     }
 }

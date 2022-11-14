@@ -80,10 +80,16 @@ public class Gun : MonoBehaviour
             TransitionToState(GunStates.Reloading);
             return;
         }
+        
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            CurrentState.OnActionReleased();
+        }
 
         if (Input.GetMouseButton(0))
         {
-            CurrentState.Shot();
+            CurrentState.OnActionExecuted();
         }
     }
 
@@ -92,6 +98,13 @@ public class Gun : MonoBehaviour
         Cartridge.Consume();
         
         Vector3 direction = GetMouseDelta();
+
+
+        RaycastHit2D hit = Physics2D.Raycast(shootPoint.position, direction);
+        Debug.DrawRay(shootPoint.position, direction);
+        
+        Debug.Log($"Collide: {hit.collider != null}");
+        
 
         float newX = direction.x * UnityEngine.Random.Range(1, precisionMargin);
         float newY = direction.y * UnityEngine.Random.Range(1, precisionMargin);
@@ -102,5 +115,25 @@ public class Gun : MonoBehaviour
 
         direction.Normalize();
         instance.Shot(direction, bulletSpeed);
+    }
+    
+    public void ShotRay(LineRenderer lineRenderer)
+    {
+        Cartridge.Consume();
+        
+        Vector3 direction = GetMouseDelta();
+
+
+        RaycastHit2D hit = Physics2D.Raycast(shootPoint.position, direction);
+        lineRenderer.SetPosition(0, shootPoint.position);
+
+        if (hit.collider != null)
+        {
+            lineRenderer.SetPosition(1, hit.point);
+        }
+        else
+        {
+            lineRenderer.SetPosition(1, direction * 10);
+        }
     }
 }

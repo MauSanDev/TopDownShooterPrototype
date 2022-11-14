@@ -23,20 +23,20 @@ public abstract class AbstractShootingStrategy : MonoBehaviour, IGunState
     {
         CooldownTimer.Update(deltaTime);
     }
-
-    public abstract void RefreshState();
-
-    public abstract Bullet GetBulletPrefab();
     
-    public void Shot()
+    public void RefreshState()
+    {
+        Gun.Cartridge.Reload();
+    }
+
+    public void ProcessShot()
     {
         if (!CooldownTimer.Finished)
         {
             return;
         }
 
-        Bullet bulletPrefab = GetBulletPrefab();
-        Gun.ShotBullet(bulletPrefab);
+        ExecuteShot();
         CooldownTimer.ResetTimer();
         
         if (!Gun.Cartridge.HasBulletsToShot)
@@ -44,4 +44,15 @@ public abstract class AbstractShootingStrategy : MonoBehaviour, IGunState
             Gun.TransitionToState(Gun.GunStates.Empty);
         }
     }
+
+    public void OnActionReleased() => OnShotEnd();
+    public void OnActionExecuted()
+    {
+        OnShotStart();
+        ProcessShot();
+    }
+
+    protected abstract void OnShotStart();
+    protected abstract void OnShotEnd();
+    protected abstract void ExecuteShot();
 }

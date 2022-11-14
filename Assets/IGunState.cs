@@ -4,5 +4,6 @@
     void UpdateState(float deltaTime);
     void RefreshState();
     void Setup(Gun gun);
-    void Shot();
+    void OnActionExecuted();
+    void OnActionReleased();
 }

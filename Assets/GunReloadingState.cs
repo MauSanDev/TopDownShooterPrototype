@@ -33,5 +33,7 @@ public class GunReloadingState : AbstractGunState
         refillTimer.ResetTimer();
     }
 
-    public override void Shot() { }
+    public override void OnActionExecuted() { }
+
+    public override void OnActionReleased() { }
 }

@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
 
-public class NormalShootingStrategy : AbstractShootingStrategy
+public class NormalShootingStrategy : BaseGunShootingStrategy
 {
     [SerializeField] private Bullet bulletPrefab;
-    
-    public override void RefreshState()
-    {
-        Gun.Cartridge.Reload();
-    }
 
-    public override Bullet GetBulletPrefab() => bulletPrefab;
+    protected override Bullet GetBulletPrefab() => bulletPrefab;
+    
+    protected override void OnShotStart() { }
+    protected override void OnShotEnd() { }
 }
