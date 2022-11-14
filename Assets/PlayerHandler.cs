@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(LifeHandler))]
 public class PlayerHandler : MonoBehaviour, IInputListener
 {
     [Header("Modifiers")]
@@ -12,11 +14,25 @@ public class PlayerHandler : MonoBehaviour, IInputListener
     [SerializeField] private SpriteRenderer spriteRenderer = null;
     [SerializeField] private GunRotator gunRotator = null;
     [SerializeField] private GunHandler gunHandler = null;
-
+    [SerializeField] private LifeHandler lifeHandler = null;
+    [SerializeField] private Collider2D collider = null;
+    
     private Vector2 lastMovementInput = Vector2.right;
     private Coroutine rollingRoutine = null;
     
     private bool IsRolling => rollingRoutine != null;
+
+    private void Awake()
+    {
+        lifeHandler.OnDeath += OnDeath;
+    }
+
+    private void OnDeath()
+    {
+        spriteRenderer.color = Color.gray;
+        gameObject.SetActive(false);
+        Debug.Log("you dead");
+    }
     
     public void ShootStarted() => gunHandler.ShotGun();
     public void ShootReleased() => gunHandler.ReleaseShot();
@@ -38,6 +54,12 @@ public class PlayerHandler : MonoBehaviour, IInputListener
         transform.Translate(input);
     }
 
+    private void SetImmunity(bool isImmune)
+    {
+        lifeHandler.SetImmunity(isImmune);
+        collider.enabled = !isImmune;
+    }
+
     public void ListenAim(Vector2 aimPosition)
     {
         gunRotator.RotateGun(aimPosition);
@@ -48,6 +70,7 @@ public class PlayerHandler : MonoBehaviour, IInputListener
     {
         Vector2 rollPosition = transform.position + (Vector3)lastMovementInput * rollDistance;
 
+        SetImmunity(true);
         spriteRenderer.color = Color.yellow;
         while (Vector3.Distance(transform.position, rollPosition) > 0.001f)
         {
@@ -56,6 +79,7 @@ public class PlayerHandler : MonoBehaviour, IInputListener
             yield return null;
         }
 
+        SetImmunity(false);
         spriteRenderer.color = Color.white;
         rollingRoutine = null;
     }

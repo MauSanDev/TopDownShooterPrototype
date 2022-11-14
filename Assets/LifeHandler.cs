@@ -8,8 +8,12 @@ public class LifeHandler : MonoBehaviour, IHitListener
     [SerializeField] private LayerMask damageLayer;
 
     private MiniTimer hitDamageTimer;
+
+    private bool isImmune = false;
     
     public event Action OnDeath;
+
+    public void SetImmunity(bool immune) => isImmune = immune;
 
     public bool IsAlive => lifePoints > 0;
 
@@ -25,7 +29,12 @@ public class LifeHandler : MonoBehaviour, IHitListener
 
     public void AddDamage(int amount = 1)
     {
-        if(!IsAlive) return;
+        if (isImmune)
+        {
+            Debug.Log($"{gameObject.name} is immune and can't take damage'");
+        }
+        
+        if(!IsAlive || isImmune) return;
 
         lifePoints -= amount;
         
