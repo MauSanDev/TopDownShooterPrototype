@@ -56,7 +56,6 @@ public class GunHandler : MonoBehaviour
         CurrentState.Setup(this);
     }
     
-
     private void Update()
     {
         CurrentState.UpdateState(Time.deltaTime);
