@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour, IInputListener
     [SerializeField] private float movementSpeed = 10;
     [SerializeField] private float rollSpeed = 10;
     [SerializeField] private SpriteRenderer spriteRenderer = null;
+    [SerializeField] private GunRotator gunRotator = null;
 
     private Coroutine rollingRoutine = null;
 
@@ -42,13 +43,11 @@ public class PlayerMovement : MonoBehaviour, IInputListener
     }
     
     #endif
+    
     public void ShootStarted() => gunHandler.ShotGun();
     public void ShootReleased() => gunHandler.ReleaseShot();
 
-    public void Roll()
-    {
-        rollingRoutine = StartCoroutine(RollRoutine());
-    }
+    public void Roll() => rollingRoutine = StartCoroutine(RollRoutine());
 
     public void Move(Vector2 axis)
     {
@@ -65,8 +64,10 @@ public class PlayerMovement : MonoBehaviour, IInputListener
         transform.Translate(input);
     }
 
-    public void GetAimDirection(Vector2 direction)
+    public void ListenAim(Vector2 aimPosition)
     {
-        throw new System.NotImplementedException();
+        gunRotator.RotateGun(aimPosition);
+        gunHandler.SetAimDirection(aimPosition);
     }
+
 }

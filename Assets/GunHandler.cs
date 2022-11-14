@@ -15,6 +15,8 @@ public class GunHandler : MonoBehaviour
     
     private Dictionary<GunStates, IGunState> gunStates = new Dictionary<GunStates, IGunState>();
 
+    private bool isShooting = false;
+
     public Transform Muzzle => gunMuzzle;
     
     public GunCartridge Cartridge { get; private set; }
@@ -59,27 +61,11 @@ public class GunHandler : MonoBehaviour
     {
         CurrentState.UpdateState(Time.deltaTime);
 
-        // if (Input.GetKeyDown(KeyCode.R) && !Cartridge.IsCartridgeFull)
-        // {
-        //     TransitionToState(GunStates.Reloading);
-        //     return;
-        // }
-        //
-        // if (Input.GetMouseButtonUp(0))
-        // {
-        // }
-        //
-        // if (Input.GetMouseButton(0))
-        // {
-        // }
-
         if (isShooting)
         {
             CurrentState.OnActionExecuted();
         }
     }
-
-    private bool isShooting = false;
 
     public void ShotGun()
     {
@@ -91,4 +77,11 @@ public class GunHandler : MonoBehaviour
         isShooting = false;
         CurrentState.OnActionReleased();
     }
+
+    public void SetAimDirection(Vector2 aimPosition)
+    {
+        AimDirection = transform.position.GetDirection(aimPosition);
+    }
+    
+    public Vector2 AimDirection { get; private set; }
 }

@@ -3,13 +3,19 @@ using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour, IInputListener
 {
-    public InputController inputConfig;
+    [SerializeField] private GameObject inputListener = null;
+    
+    private InputController inputConfig;
     private IInputListener currentListener = null;
 
-    [SerializeField] private GameObject inputListener = null;
+    private Mouse currentMouse = null;
+    private Camera mainCamera = null;
 
     private void Awake()
     {
+        mainCamera = Camera.main;
+        currentMouse = Mouse.current;
+        
         inputConfig = new InputController();
 
         if (inputListener != null)
@@ -25,6 +31,7 @@ public class InputManager : MonoBehaviour, IInputListener
     private void FixedUpdate()
     {
         Move(inputConfig.MainPlayer.Movement.ReadValue<Vector2>());
+        ListenAim(mainCamera.ScreenToWorldPoint(currentMouse.position.ReadValue()));
     }
 
     private void OnEnable() => inputConfig.Enable();
@@ -36,35 +43,8 @@ public class InputManager : MonoBehaviour, IInputListener
 
     public void Roll() => currentListener.Roll();
     public void Move(Vector2 axis) => currentListener.Move(axis);
-    public void GetAimDirection(Vector2 direction) => Mouse.current.position.ReadValue();
-}
 
-public class FakeListener : IInputListener
-{
-    public void ShootStarted()
-    {
-        Debug.Log("Shoot");
-    }
-
-    public void ShootReleased()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void Roll()
-    {
-        Debug.Log("Roll");
-    }
-
-    public void Move(Vector2 axis)
-    {
-        Debug.Log($"Move {axis}");
-    }
-
-    public void GetAimDirection(Vector2 direction)
-    {
-        throw new System.NotImplementedException();
-    }
+    public void ListenAim(Vector2 aimPosition) => currentListener.ListenAim(aimPosition);
 }
 
 public interface IInputListener
@@ -73,5 +53,5 @@ public interface IInputListener
     void ShootReleased();
     void Roll();
     void Move(Vector2 axis);
-    void GetAimDirection(Vector2 direction);
+    void ListenAim(Vector2 aimPosition);
 }

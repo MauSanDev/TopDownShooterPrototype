@@ -37,7 +37,7 @@ public abstract class BaseGunShootingStrategy : AbstractShootingStrategy
 
     private Vector3 GetBulletDirection()
     {
-        Vector3 direction = GunHandler.transform.position.GetMouseDelta();
+        Vector3 direction = GunHandler.AimDirection;
         float newX = direction.x * UnityEngine.Random.Range(1, GunHandler.PrecisionMargin);
         float newY = direction.y * UnityEngine.Random.Range(1, GunHandler.PrecisionMargin);
         return new Vector3(newX, newY, 1);

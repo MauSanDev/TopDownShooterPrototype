@@ -24,7 +24,7 @@ public class BaseBeamShootingStrategy : AbstractShootingStrategy
     protected override void ExecuteShot()
     {
         Vector3 muzzlePosition = GunHandler.Muzzle.position;
-        Vector3 direction = GunHandler.transform.position.GetMouseDelta();
+        Vector3 direction = GunHandler.AimDirection;
         
         RaycastHit2D hit = Physics2D.Raycast(muzzlePosition, direction);
         lineRenderer.SetPosition(0, muzzlePosition);
