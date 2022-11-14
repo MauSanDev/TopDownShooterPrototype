@@ -69,6 +69,7 @@ public class GunHandler : MonoBehaviour
 
     public void ShotGun()
     {
+        CurrentState.OnActionExecuted();
         isShooting = true;
     }
 
