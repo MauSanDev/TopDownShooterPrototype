@@ -42,10 +42,8 @@ public class PlayerMovement : MonoBehaviour, IInputListener
     }
     
     #endif
-    public void Shoot()
-    {
-        Debug.Log("Shoot");
-    }
+    public void ShootStarted() => gunHandler.ShotGun();
+    public void ShootReleased() => gunHandler.ReleaseShot();
 
     public void Roll()
     {
@@ -65,5 +63,10 @@ public class PlayerMovement : MonoBehaviour, IInputListener
         }
         
         transform.Translate(input);
+    }
+
+    public void GetAimDirection(Vector2 direction)
+    {
+        throw new System.NotImplementedException();
     }
 }

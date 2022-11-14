@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour, IInputListener
 {
@@ -16,7 +17,8 @@ public class InputManager : MonoBehaviour, IInputListener
             currentListener = inputListener.GetComponent<IInputListener>();
         }
         
-        inputConfig.MainPlayer.Shot.performed += x => Shoot();
+        inputConfig.MainPlayer.Shot.performed += x => ShootStarted();
+        inputConfig.MainPlayer.Shot.canceled += x => ShootReleased();
         inputConfig.MainPlayer.Roll.performed += x => Roll();
     }
 
@@ -29,16 +31,24 @@ public class InputManager : MonoBehaviour, IInputListener
     private void OnDisable() => inputConfig.Disable();
 
     public void SetListener(IInputListener listener) => currentListener = listener;
-    public void Shoot() => currentListener.Shoot();
+    public void ShootStarted() => currentListener.ShootStarted();
+    public void ShootReleased() => currentListener.ShootReleased();
+
     public void Roll() => currentListener.Roll();
     public void Move(Vector2 axis) => currentListener.Move(axis);
+    public void GetAimDirection(Vector2 direction) => Mouse.current.position.ReadValue();
 }
 
 public class FakeListener : IInputListener
 {
-    public void Shoot()
+    public void ShootStarted()
     {
         Debug.Log("Shoot");
+    }
+
+    public void ShootReleased()
+    {
+        throw new System.NotImplementedException();
     }
 
     public void Roll()
@@ -50,11 +60,18 @@ public class FakeListener : IInputListener
     {
         Debug.Log($"Move {axis}");
     }
+
+    public void GetAimDirection(Vector2 direction)
+    {
+        throw new System.NotImplementedException();
+    }
 }
 
 public interface IInputListener
 {
-    void Shoot();
+    void ShootStarted();
+    void ShootReleased();
     void Roll();
     void Move(Vector2 axis);
+    void GetAimDirection(Vector2 direction);
 }

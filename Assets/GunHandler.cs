@@ -40,8 +40,7 @@ public class GunHandler : MonoBehaviour
             {GunStates.Empty, new GunEmptyState()}
         };
     }
-    
-    
+
     private void Awake()
     {
         Cartridge = new GunCartridge(bulletsPerCartridge, totalBullets);
@@ -60,20 +59,36 @@ public class GunHandler : MonoBehaviour
     {
         CurrentState.UpdateState(Time.deltaTime);
 
-        if (Input.GetKeyDown(KeyCode.R) && !Cartridge.IsCartridgeFull)
-        {
-            TransitionToState(GunStates.Reloading);
-            return;
-        }
+        // if (Input.GetKeyDown(KeyCode.R) && !Cartridge.IsCartridgeFull)
+        // {
+        //     TransitionToState(GunStates.Reloading);
+        //     return;
+        // }
+        //
+        // if (Input.GetMouseButtonUp(0))
+        // {
+        // }
+        //
+        // if (Input.GetMouseButton(0))
+        // {
+        // }
 
-        if (Input.GetMouseButtonUp(0))
-        {
-            CurrentState.OnActionReleased();
-        }
-
-        if (Input.GetMouseButton(0))
+        if (isShooting)
         {
             CurrentState.OnActionExecuted();
         }
+    }
+
+    private bool isShooting = false;
+
+    public void ShotGun()
+    {
+        isShooting = true;
+    }
+
+    public void ReleaseShot()
+    {
+        isShooting = false;
+        CurrentState.OnActionReleased();
     }
 }
