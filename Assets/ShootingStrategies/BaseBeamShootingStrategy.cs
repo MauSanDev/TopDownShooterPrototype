@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 
-public class BaseBeamShootingStrategy : AbstractShootingStrategy
+public class BaseBeamShootingStrategy : AbstractShootingStrategy, ILifeHitCollider
 {
+    [SerializeField] private float beamDamageCooldown =.1f;
     [SerializeField] private LineRenderer lineRenderer;
 
     public override void ProcessShot()
@@ -29,15 +30,18 @@ public class BaseBeamShootingStrategy : AbstractShootingStrategy
         RaycastHit2D hit = Physics2D.Raycast(muzzlePosition, direction);
         lineRenderer.SetPosition(0, muzzlePosition);
 
-        if (hit.collider != null)
-        {
-            lineRenderer.SetPosition(1, hit.point);
-        }
-        else
+        if (hit.collider == null)
         {
             Debug.LogWarning($"{GetType()} :: {gameObject.name} beam didn't found a target!");
             lineRenderer.SetPosition(1, direction * 10);
+            return;
         }
+
+        if (hit.collider.TryGetComponent(out IHitListener handler))
+        {
+            handler.OnHitReceived(this);
+        }
+        lineRenderer.SetPosition(1, hit.point);
     }
 
     protected override void OnShotStart()
@@ -49,4 +53,6 @@ public class BaseBeamShootingStrategy : AbstractShootingStrategy
     {
         lineRenderer.gameObject.SetActive(false);
     }
+
+    public float DamageCooldown => beamDamageCooldown;
 }

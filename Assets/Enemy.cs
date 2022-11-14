@@ -1,6 +1,6 @@
-using System;
 using UnityEngine;
 
+[RequireComponent(typeof(LifeHandler))]
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private LifeHandler lifeHandler;

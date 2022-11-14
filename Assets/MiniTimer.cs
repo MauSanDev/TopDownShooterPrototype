@@ -5,9 +5,11 @@ public class MiniTimer
     public MiniTimer(float cooldown, bool startInited = false)
     {
         Finished = !startInited;
-        this.cooldown = cooldown;
+        SetTime(cooldown);
         ResetTimer();
     }
+
+    public void SetTime(float time) => cooldown = time;
     
     private float cooldown = 0;
     private float currentTime = 0;

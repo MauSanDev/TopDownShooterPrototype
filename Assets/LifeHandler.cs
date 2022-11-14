@@ -1,17 +1,29 @@
 using System;
 using UnityEngine;
 
-public class LifeHandler : MonoBehaviour
+public class LifeHandler : MonoBehaviour, IHitListener
 {
-    [SerializeField] private int lifePoints;
-
+    [SerializeField] private int lifePoints = 10;
+    [SerializeField] private float damageCooldown = .2f;
     [SerializeField] private LayerMask damageLayer;
 
+    private MiniTimer hitDamageTimer;
+    
     public event Action OnDeath;
 
     public bool IsAlive => lifePoints > 0;
 
-    private void AddDamage(int amount = 1)
+    private void Awake()
+    {
+        hitDamageTimer = new MiniTimer(damageCooldown, true);
+    }
+
+    private void Update()
+    {
+        hitDamageTimer.Update(Time.deltaTime);
+    }
+
+    public void AddDamage(int amount = 1)
     {
         if(!IsAlive) return;
 
@@ -29,4 +41,21 @@ public class LifeHandler : MonoBehaviour
 
         AddDamage();
     }
+
+    public void OnHitReceived(IHitCollider collider)
+    {
+        if (collider is ILifeHitCollider lifeHitCollider)
+        {
+            hitDamageTimer.SetTime(lifeHitCollider.DamageCooldown);
+            
+            if(!hitDamageTimer.Finished) return;
+            AddDamage();
+            hitDamageTimer.ResetTimer();
+        }
+    }
+}
+
+public interface ILifeHitCollider : IHitCollider
+{
+    float DamageCooldown { get; }
 }
