@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc7cfb7a786cd4a41b93a874a7a6a34e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootPoint: {fileID: 1486988315}
+  gunMuzzle: {fileID: 1486988315}
   bulletSpeed: 20
   reloadCooldown: 1
   bulletsPerCartridge: 100
@@ -894,7 +894,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1486988315}
   m_Layer: 0
-  m_Name: ShootPoint
+  m_Name: Muzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

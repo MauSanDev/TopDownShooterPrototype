@@ -29,22 +29,6 @@ public abstract class AbstractShootingStrategy : MonoBehaviour, IGunState
         Gun.Cartridge.Reload();
     }
 
-    public void ProcessShot()
-    {
-        if (!CooldownTimer.Finished)
-        {
-            return;
-        }
-
-        ExecuteShot();
-        CooldownTimer.ResetTimer();
-        
-        if (!Gun.Cartridge.HasBulletsToShot)
-        {
-            Gun.TransitionToState(Gun.GunStates.Empty);
-        }
-    }
-
     public void OnActionReleased() => OnShotEnd();
     public void OnActionExecuted()
     {
@@ -55,4 +39,5 @@ public abstract class AbstractShootingStrategy : MonoBehaviour, IGunState
     protected abstract void OnShotStart();
     protected abstract void OnShotEnd();
     protected abstract void ExecuteShot();
+    public abstract void ProcessShot();
 }

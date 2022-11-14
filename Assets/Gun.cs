@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    [SerializeField] private Transform shootPoint = null;
+    [SerializeField] private Transform gunMuzzle = null;
     [SerializeField] private float bulletSpeed;
 
     [Header("Gun Configuration")] 
@@ -15,8 +14,13 @@ public class Gun : MonoBehaviour
     [SerializeField][Range(1,10)] private float precisionMargin = 1.4f;
     
     private Dictionary<GunStates, IGunState> gunStates = new Dictionary<GunStates, IGunState>();
+
+    public Transform Muzzle => gunMuzzle;
     
     public GunCartridge Cartridge { get; private set; }
+
+    public float BulletSpeed => bulletSpeed;
+    public float PrecisionMargin => precisionMargin;
     
     public enum GunStates
     {
@@ -46,13 +50,14 @@ public class Gun : MonoBehaviour
         TransitionToState(GunStates.ReadyToShot);
     }
     
-    private void RotateGun(Vector3 mouseDelta)
+    private void RotateGun()
     {
+        Vector3 mouseDelta = GetAimDelta();
         float angle = Mathf.Atan2 (mouseDelta.y, mouseDelta.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
-    private Vector3 GetMouseDelta()
+    public Vector3 GetAimDelta()
     {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 direction = mousePos - transform.position;
@@ -69,9 +74,7 @@ public class Gun : MonoBehaviour
 
     private void Update()
     {
-        Vector3 mouseDelta = GetMouseDelta();
-        
-        RotateGun(mouseDelta);
+        RotateGun();
         
         CurrentState.UpdateState(Time.deltaTime);
 
@@ -80,7 +83,6 @@ public class Gun : MonoBehaviour
             TransitionToState(GunStates.Reloading);
             return;
         }
-        
 
         if (Input.GetMouseButtonUp(0))
         {
@@ -90,50 +92,6 @@ public class Gun : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             CurrentState.OnActionExecuted();
-        }
-    }
-
-    public void ShotBullet(Bullet bulletPrefab)
-    {
-        Cartridge.Consume();
-        
-        Vector3 direction = GetMouseDelta();
-
-
-        RaycastHit2D hit = Physics2D.Raycast(shootPoint.position, direction);
-        Debug.DrawRay(shootPoint.position, direction);
-        
-        Debug.Log($"Collide: {hit.collider != null}");
-        
-
-        float newX = direction.x * UnityEngine.Random.Range(1, precisionMargin);
-        float newY = direction.y * UnityEngine.Random.Range(1, precisionMargin);
-
-        direction = new Vector3(newX, newY, 1);
-        
-        Bullet instance = Instantiate(bulletPrefab, shootPoint.position, quaternion.identity);
-
-        direction.Normalize();
-        instance.Shot(direction, bulletSpeed);
-    }
-    
-    public void ShotRay(LineRenderer lineRenderer)
-    {
-        Cartridge.Consume();
-        
-        Vector3 direction = GetMouseDelta();
-
-
-        RaycastHit2D hit = Physics2D.Raycast(shootPoint.position, direction);
-        lineRenderer.SetPosition(0, shootPoint.position);
-
-        if (hit.collider != null)
-        {
-            lineRenderer.SetPosition(1, hit.point);
-        }
-        else
-        {
-            lineRenderer.SetPosition(1, direction * 10);
         }
     }
 }
