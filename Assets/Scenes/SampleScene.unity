@@ -173,7 +173,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 215feac061b99634280d63db6da898bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 10
+  movementSpeed: 6
+  rollSpeed: 15
+  spriteRenderer: {fileID: 1695512816}
+  rollDistance: 4
 --- !u!1 &118483563
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,6 +892,10 @@ PrefabInstance:
     - target: {fileID: 1538165919099284481, guid: bc9334ee23e892e43a9666aef6ebae64, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1538165919099284482, guid: bc9334ee23e892e43a9666aef6ebae64, type: 3}
+      propertyPath: precisionMargin
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc9334ee23e892e43a9666aef6ebae64, type: 3}
