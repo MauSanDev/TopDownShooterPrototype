@@ -53,6 +53,15 @@ public partial class @InputController : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""db9a5140-9a65-4901-a848-ce97cd8236e5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -132,6 +141,17 @@ public partial class @InputController : IInputActionCollection2, IDisposable
                     ""action"": ""Roll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e5c4eb09-66ed-4e87-bf72-671438768b0d"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -160,6 +180,7 @@ public partial class @InputController : IInputActionCollection2, IDisposable
         m_MainPlayer_Shot = m_MainPlayer.FindAction("Shot", throwIfNotFound: true);
         m_MainPlayer_Movement = m_MainPlayer.FindAction("Movement", throwIfNotFound: true);
         m_MainPlayer_Roll = m_MainPlayer.FindAction("Roll", throwIfNotFound: true);
+        m_MainPlayer_Reload = m_MainPlayer.FindAction("Reload", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -222,6 +243,7 @@ public partial class @InputController : IInputActionCollection2, IDisposable
     private readonly InputAction m_MainPlayer_Shot;
     private readonly InputAction m_MainPlayer_Movement;
     private readonly InputAction m_MainPlayer_Roll;
+    private readonly InputAction m_MainPlayer_Reload;
     public struct MainPlayerActions
     {
         private @InputController m_Wrapper;
@@ -229,6 +251,7 @@ public partial class @InputController : IInputActionCollection2, IDisposable
         public InputAction @Shot => m_Wrapper.m_MainPlayer_Shot;
         public InputAction @Movement => m_Wrapper.m_MainPlayer_Movement;
         public InputAction @Roll => m_Wrapper.m_MainPlayer_Roll;
+        public InputAction @Reload => m_Wrapper.m_MainPlayer_Reload;
         public InputActionMap Get() { return m_Wrapper.m_MainPlayer; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -247,6 +270,9 @@ public partial class @InputController : IInputActionCollection2, IDisposable
                 @Roll.started -= m_Wrapper.m_MainPlayerActionsCallbackInterface.OnRoll;
                 @Roll.performed -= m_Wrapper.m_MainPlayerActionsCallbackInterface.OnRoll;
                 @Roll.canceled -= m_Wrapper.m_MainPlayerActionsCallbackInterface.OnRoll;
+                @Reload.started -= m_Wrapper.m_MainPlayerActionsCallbackInterface.OnReload;
+                @Reload.performed -= m_Wrapper.m_MainPlayerActionsCallbackInterface.OnReload;
+                @Reload.canceled -= m_Wrapper.m_MainPlayerActionsCallbackInterface.OnReload;
             }
             m_Wrapper.m_MainPlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -260,6 +286,9 @@ public partial class @InputController : IInputActionCollection2, IDisposable
                 @Roll.started += instance.OnRoll;
                 @Roll.performed += instance.OnRoll;
                 @Roll.canceled += instance.OnRoll;
+                @Reload.started += instance.OnReload;
+                @Reload.performed += instance.OnReload;
+                @Reload.canceled += instance.OnReload;
             }
         }
     }
@@ -278,5 +307,6 @@ public partial class @InputController : IInputActionCollection2, IDisposable
         void OnShot(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
 }

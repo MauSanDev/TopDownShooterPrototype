@@ -21,6 +21,7 @@ public class PlayerHandler : MonoBehaviour, IInputListener
     public void ShootStarted() => gunHandler.ShotGun();
     public void ShootReleased() => gunHandler.ReleaseShot();
     public void Roll() => rollingRoutine = StartCoroutine(RollRoutine());
+    public void Reload() => gunHandler.TransitionToState(GunHandler.GunStates.Reloading);
 
     public void Move(Vector2 axis)
     {

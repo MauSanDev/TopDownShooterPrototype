@@ -35,6 +35,7 @@ public class InputManager : MonoBehaviour, IInputListener
         inputConfig.MainPlayer.Shot.performed += x => ShootStarted();
         inputConfig.MainPlayer.Shot.canceled += x => ShootReleased();
         inputConfig.MainPlayer.Roll.performed += x => Roll();
+        inputConfig.MainPlayer.Reload.performed += x => Reload();
     }
     
     public void SetListener(IInputListener listener) => currentListener = listener;
@@ -46,6 +47,8 @@ public class InputManager : MonoBehaviour, IInputListener
     public void ShootReleased() => currentListener.ShootReleased();
 
     public void Roll() => currentListener.Roll();
+    public void Reload() => currentListener.Reload();
+
     public void Move(Vector2 axis) => currentListener.Move(axis);
 
     public void ListenAim(Vector2 aimPosition) => currentListener.ListenAim(aimPosition);
@@ -62,6 +65,7 @@ public interface IInputListener
     void ShootStarted();
     void ShootReleased();
     void Roll();
+    void Reload();
     void Move(Vector2 axis);
     void ListenAim(Vector2 aimPosition);
 }
