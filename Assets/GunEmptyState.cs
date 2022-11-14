@@ -18,8 +18,5 @@ public class GunEmptyState : AbstractGunState
         }
     }
 
-    public override void OnActionReleased()
-    {
-        throw new System.NotImplementedException();
-    }
+    public override void OnActionReleased() { }
 }
