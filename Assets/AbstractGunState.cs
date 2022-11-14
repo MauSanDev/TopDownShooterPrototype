@@ -1,10 +1,10 @@
 ﻿public abstract class AbstractGunState : IGunState
 {
-    public Gun Gun { get; set; }
+    public GunHandler GunHandler { get; set; }
     
-    public void Setup(Gun gun)
+    public void Setup(GunHandler gunHandler)
     {
-        Gun = gun;
+        GunHandler = gunHandler;
         RefreshState();
     }
 

@@ -8,23 +8,23 @@ public class BaseBeamShootingStrategy : AbstractShootingStrategy
     {
         if (CooldownTimer.Finished)
         {
-            Gun.Cartridge.Consume();
+            GunHandler.Cartridge.Consume();
             CooldownTimer.ResetTimer();
         }
 
         ExecuteShot();
         
-        if (!Gun.Cartridge.HasBulletsToShot)
+        if (!GunHandler.Cartridge.HasBulletsToShot)
         {
             OnShotEnd();
-            Gun.TransitionToState(Gun.GunStates.Empty);
+            GunHandler.TransitionToState(GunHandler.GunStates.Empty);
         }
     }
 
     protected override void ExecuteShot()
     {
-        Vector3 muzzlePosition = Gun.Muzzle.position;
-        Vector3 direction = Gun.GetAimDelta();
+        Vector3 muzzlePosition = GunHandler.Muzzle.position;
+        Vector3 direction = GunHandler.transform.position.GetMouseDelta();
         
         RaycastHit2D hit = Physics2D.Raycast(muzzlePosition, direction);
         lineRenderer.SetPosition(0, muzzlePosition);

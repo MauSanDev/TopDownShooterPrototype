@@ -15,31 +15,31 @@ public abstract class BaseGunShootingStrategy : AbstractShootingStrategy
         ExecuteShot();
         CooldownTimer.ResetTimer();
         
-        if (!Gun.Cartridge.HasBulletsToShot)
+        if (!GunHandler.Cartridge.HasBulletsToShot)
         {
-            Gun.TransitionToState(Gun.GunStates.Empty);
+            GunHandler.TransitionToState(GunHandler.GunStates.Empty);
         }
     }
 
     protected override void ExecuteShot()
     {
-        Gun.Cartridge.Consume();
+        GunHandler.Cartridge.Consume();
 
         Bullet bulletPrefab = GetBulletPrefab();
-        Vector3 muzzlePosition = Gun.Muzzle.position;
+        Vector3 muzzlePosition = GunHandler.Muzzle.position;
         Vector3 direction = GetBulletDirection();
 
         Bullet instance = Instantiate(bulletPrefab, muzzlePosition, quaternion.identity);
 
         direction.Normalize();
-        instance.Shot(direction, Gun.BulletSpeed);
+        instance.Shot(direction, GunHandler.BulletSpeed);
     }
 
     private Vector3 GetBulletDirection()
     {
-        Vector3 direction = Gun.GetAimDelta();
-        float newX = direction.x * UnityEngine.Random.Range(1, Gun.PrecisionMargin);
-        float newY = direction.y * UnityEngine.Random.Range(1, Gun.PrecisionMargin);
+        Vector3 direction = GunHandler.transform.position.GetMouseDelta();
+        float newX = direction.x * UnityEngine.Random.Range(1, GunHandler.PrecisionMargin);
+        float newY = direction.y * UnityEngine.Random.Range(1, GunHandler.PrecisionMargin);
         return new Vector3(newX, newY, 1);
     }
 }

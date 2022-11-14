@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Gun))]
+[RequireComponent(typeof(GunHandler))]
 public abstract class AbstractShootingStrategy : MonoBehaviour, IGunState
 {
     [SerializeField] private float cooldownBetweenShots = .2f;
@@ -11,11 +11,11 @@ public abstract class AbstractShootingStrategy : MonoBehaviour, IGunState
         CooldownTimer = new MiniTimer(cooldownBetweenShots);
     }
     
-    public Gun Gun { get; set; }
+    public GunHandler GunHandler { get; set; }
 
-    public void Setup(Gun gun)
+    public void Setup(GunHandler gunHandler)
     {
-        Gun = gun;
+        GunHandler = gunHandler;
         RefreshState();
     }
 
@@ -26,7 +26,7 @@ public abstract class AbstractShootingStrategy : MonoBehaviour, IGunState
     
     public void RefreshState()
     {
-        Gun.Cartridge.Reload();
+        GunHandler.Cartridge.Reload();
     }
 
     public void OnActionReleased() => OnShotEnd();

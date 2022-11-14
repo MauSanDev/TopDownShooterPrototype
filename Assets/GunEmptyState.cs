@@ -8,9 +8,9 @@ public class GunEmptyState : AbstractGunState
 
     public override void OnActionExecuted()
     {
-        if (Gun.Cartridge.HasBulletsToLoad)
+        if (GunHandler.Cartridge.HasBulletsToLoad)
         {
-            Gun.TransitionToState(Gun.GunStates.Reloading);
+            GunHandler.TransitionToState(GunHandler.GunStates.Reloading);
         }
         else
         {

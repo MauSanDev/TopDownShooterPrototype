@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+public class GunHandler : MonoBehaviour
 {
     [SerializeField] private Transform gunMuzzle = null;
     [SerializeField] private float bulletSpeed;
@@ -49,21 +49,6 @@ public class Gun : MonoBehaviour
         DefineStates();
         TransitionToState(GunStates.ReadyToShot);
     }
-    
-    private void RotateGun()
-    {
-        Vector3 mouseDelta = GetAimDelta();
-        float angle = Mathf.Atan2 (mouseDelta.y, mouseDelta.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle);
-    }
-
-    public Vector3 GetAimDelta()
-    {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 direction = mousePos - transform.position;
-        
-        return direction;
-    }
 
     public void TransitionToState(GunStates newState)
     {
@@ -74,8 +59,6 @@ public class Gun : MonoBehaviour
 
     private void Update()
     {
-        RotateGun();
-        
         CurrentState.UpdateState(Time.deltaTime);
 
         if (Input.GetKeyDown(KeyCode.R) && !Cartridge.IsCartridgeFull)

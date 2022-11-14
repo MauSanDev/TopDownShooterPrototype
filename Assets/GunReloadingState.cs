@@ -20,7 +20,7 @@ public class GunReloadingState : AbstractGunState
     private void OnRefillCompleted()
     {
         Debug.Log("Bullets Refilled");
-        Gun.TransitionToState(Gun.GunStates.ReadyToShot);
+        GunHandler.TransitionToState(GunHandler.GunStates.ReadyToShot);
     }
     
     public override void UpdateState(float deltaTime)
