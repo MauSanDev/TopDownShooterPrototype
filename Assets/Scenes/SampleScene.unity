@@ -224,13 +224,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 6
+  lifeHandler: {fileID: 68310008}
+  mainCollider: {fileID: 0}
+  spriteRenderer: {fileID: 1695512816}
+  gunHandler: {fileID: 1675407262}
+  gunRotator: {fileID: 153520244}
   rollSpeed: 15
   rollDistance: 4
-  spriteRenderer: {fileID: 1695512816}
-  gunRotator: {fileID: 153520244}
-  gunHandler: {fileID: 1675407262}
-  lifeHandler: {fileID: 68310008}
-  collider: {fileID: 68310004}
 --- !u!114 &68310008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,7 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae34841ecb89eaf4eaded10f4c31c3c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifePoints: 100
+  lifePoints: 3
   damageCooldown: 0.2
   damageLayer:
     serializedVersion: 2
@@ -746,12 +746,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 539a9c9e4a792aa4884f33c58efa12bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementSpeed: 10
   lifeHandler: {fileID: 953417900}
-  mainCollider: {fileID: 0}
+  mainCollider: {fileID: 953417898}
   spriteRenderer: {fileID: 118483565}
   gunHandler: {fileID: 1664187394}
-  enemyBehaviour: {fileID: 11400000, guid: d892ebb610240794db337703a0e8aba2, type: 2}
   gunRotator: {fileID: 237979565}
+  enemyBehaviour: {fileID: 11400000, guid: d892ebb610240794db337703a0e8aba2, type: 2}
   target: {fileID: 68310006}
 --- !u!1 &961839298
 GameObject:

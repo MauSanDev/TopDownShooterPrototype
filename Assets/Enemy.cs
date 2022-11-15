@@ -1,23 +1,14 @@
 using UnityEngine;
 
-[RequireComponent(typeof(LifeHandler))]
-public class Enemy : MonoBehaviour
+public class Enemy : AbstractShooterNPC
 {
-    [SerializeField] private LifeHandler lifeHandler = null;
-    [SerializeField] private Collider2D mainCollider = null;
-    [SerializeField] private SpriteRenderer spriteRenderer = null;
-    [SerializeField] private GunHandler gunHandler = null;
     [SerializeField] private AbstractEnemyBehaviour enemyBehaviour = null;
-    [SerializeField] private GunRotator gunRotator = null;
-
     [SerializeField] private Transform target;
-    
-    public GunHandler Gun => gunHandler;
-    
-    private void Awake()
+
+    protected override void Awake()
     {
+        base.Awake();
         enemyBehaviour.Setup(this, target);
-        lifeHandler.OnDeath += OnDeath;
     }
     
     private void Update()
@@ -26,15 +17,9 @@ public class Enemy : MonoBehaviour
         enemyBehaviour.Update();
     }
 
-    private void OnDestroy()
+    protected override void OnDeath()
     {
-        lifeHandler.OnDeath -= OnDeath;
-    }
-
-    private void OnDeath()
-    {
-        spriteRenderer.color = Color.gray;
+        base.OnDeath();
         mainCollider.enabled = false;
     }
-    
 }
