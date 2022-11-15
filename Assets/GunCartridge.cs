@@ -6,7 +6,7 @@ public class GunCartridge
     private AmountStack totalBullets;
     
     public bool HasBulletsToShot => cartridgeBullets.RemainingAmount > 0;
-    public bool HasBulletsToLoad => cartridgeBullets.RemainingAmount > 0;
+    public bool HasBulletsToLoad => totalBullets.RemainingAmount > 0;
 
     public bool IsCartridgeFull => cartridgeBullets.IsFull || totalBullets.IsEmpty;
     
