@@ -455,6 +455,10 @@ PrefabInstance:
       propertyPath: precisionMargin
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1538165919099284482, guid: bc9334ee23e892e43a9666aef6ebae64, type: 3}
+      propertyPath: bulletsPerCartridge
+      value: 15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc9334ee23e892e43a9666aef6ebae64, type: 3}
 --- !u!1 &153520242
@@ -626,10 +630,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 953417901}
+  - component: {fileID: 953417902}
+  - component: {fileID: 953417900}
   - component: {fileID: 953417899}
   - component: {fileID: 953417898}
-  - component: {fileID: 953417900}
-  - component: {fileID: 953417902}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -730,11 +734,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeHandler: {fileID: 953417900}
-  collider: {fileID: 953417898}
+  mainCollider: {fileID: 0}
   spriteRenderer: {fileID: 118483565}
   gunHandler: {fileID: 1664187394}
-  player: {fileID: 68310003}
-  shotAfterTime: 0.3
+  enemyBehaviour: {fileID: 11400000, guid: d892ebb610240794db337703a0e8aba2, type: 2}
+  target: {fileID: 68310006}
 --- !u!1 &961839298
 GameObject:
   m_ObjectHideFlags: 0

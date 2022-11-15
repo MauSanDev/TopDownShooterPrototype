@@ -1,39 +1,28 @@
-using System;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 [RequireComponent(typeof(LifeHandler))]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private LifeHandler lifeHandler;
-    [SerializeField] private Collider2D collider;
-    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private LifeHandler lifeHandler = null;
+    [SerializeField] private Collider2D mainCollider = null;
+    [SerializeField] private SpriteRenderer spriteRenderer = null;
+    [SerializeField] private GunHandler gunHandler = null;
+    [SerializeField] private AbstractEnemyBehaviour enemyBehaviour = null;
 
-    [SerializeField] private GunHandler gunHandler;
-    [SerializeField] private GameObject player;
 
-    [SerializeField] private float shotAfterTime = 2f;
-
-    private MiniTimer shotTimer;
-
-    private void Update()
-    {
-        shotTimer.Update(Time.deltaTime);
-        
-        gunHandler.SetAimDirection(player.transform.position);
-
-        if (shotTimer.Finished)
-        {
-            gunHandler.ShotGun();
-            gunHandler.ReleaseShot();
-            shotTimer.ResetTimer();
-        }
-    }
-
+    [SerializeField] private Transform target;
+    
+    public GunHandler Gun => gunHandler;
+    
     private void Awake()
     {
-        shotTimer = new MiniTimer(shotAfterTime, false);
+        enemyBehaviour.Setup(this, target);
         lifeHandler.OnDeath += OnDeath;
+    }
+    
+    private void Update()
+    {
+        enemyBehaviour.Update();
     }
 
     private void OnDestroy()
@@ -44,7 +33,7 @@ public class Enemy : MonoBehaviour
     private void OnDeath()
     {
         spriteRenderer.color = Color.gray;
-        collider.enabled = false;
+        mainCollider.enabled = false;
     }
     
 }

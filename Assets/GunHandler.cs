@@ -56,6 +56,8 @@ public class GunHandler : MonoBehaviour
         CurrentState = gunStates[newState];
         CurrentState.Setup(this);
     }
+
+    public bool IsCharging => CurrentState is GunReloadingState;
     
     private void Update()
     {

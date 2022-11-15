@@ -27,7 +27,7 @@ public class LifeHandler : MonoBehaviour, IHitListener
         hitDamageTimer.Update(Time.deltaTime);
     }
 
-    public void AddDamage(int amount = 1)
+    private void AddDamage(int amount = 1)
     {
         if (isImmune)
         {
