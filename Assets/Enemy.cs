@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer = null;
     [SerializeField] private GunHandler gunHandler = null;
     [SerializeField] private AbstractEnemyBehaviour enemyBehaviour = null;
-
+    [SerializeField] private GunRotator gunRotator = null;
 
     [SerializeField] private Transform target;
     
@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour
     
     private void Update()
     {
+        gunRotator.RotateGun(target.position);
         enemyBehaviour.Update();
     }
 
