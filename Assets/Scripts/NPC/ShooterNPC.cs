@@ -4,6 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class ShooterNPC : MonoBehaviour, IInputListener
 {
+    public const string STATE_READY_TO_SHOT = "ReadyToShot";
+    public const string STATE_DEATH = "Dead";
+    
     [Header("Components")]
     [SerializeField] protected LifeHandler lifeHandler = null;
     [SerializeField] protected Collider2D mainCollider = null;
@@ -30,9 +33,6 @@ public class ShooterNPC : MonoBehaviour, IInputListener
     public void SetImmunity(bool immune) => lifeHandler.SetImmunity(immune);
     public void SetTouchable(bool isTouchable) => mainCollider.enabled = isTouchable;
     public void SetColor(Color newColor) => spriteRenderer.color = newColor;
-
-    public const string STATE_READY_TO_SHOT = "ReadyToShot";
-    public const string STATE_DEATH = "Dead";
 
     private void SetupStateMachine()
     {

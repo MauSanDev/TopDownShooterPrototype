@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class GunHandler : MonoBehaviour
 {
+    public const string STATE_READY_TO_SHOT = "ReadyToShot";
+    public const string STATE_RELOADING = "Reloading";
+    public const string STATE_EMPTY = "Empty";
+    
     [SerializeField] private Transform gunMuzzle = null;
     [SerializeField] private float bulletSpeed;
 
@@ -24,10 +28,6 @@ public class GunHandler : MonoBehaviour
 
     public float BulletSpeed => bulletSpeed;
     public float PrecisionMargin => precisionMargin;
-
-    public const string STATE_READY_TO_SHOT = "ReadyToShot";
-    public const string STATE_RELOADING = "Reloading";
-    public const string STATE_EMPTY = "Empty";
     
     private void DefineStates()
     {
