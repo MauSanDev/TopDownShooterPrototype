@@ -3,7 +3,7 @@ public class NPCDeathState : AbstractNPCState
 {
     public NPCDeathState(ShooterNPC owner) : base(owner) { }
     
-    public override void Apply()
+    public override void OnStateApply()
     {
         Owner.SetColor(Color.gray);
         Owner.GunRotator.gameObject.SetActive(false);

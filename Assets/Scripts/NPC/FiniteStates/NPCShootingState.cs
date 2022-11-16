@@ -8,7 +8,7 @@ public class NPCShootingState : AbstractNPCState
 
     public NPCShootingState(ShooterNPC owner) : base(owner) { }
 
-    public override void Apply() { }
+    public override void OnStateApply() { }
     public override void ShootStarted() => Owner.Gun.ShotGun();
     public override void ShootReleased() => Owner.Gun.ReleaseShot();
     public override void Roll() => Owner.StartCoroutine(RollRoutine());

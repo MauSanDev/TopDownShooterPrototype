@@ -18,8 +18,8 @@ public class ShooterNPC : MonoBehaviour, IInputListener
     
     [Header("IA")]
     [SerializeField] private AbstractNPCBehaviour behavior;
-    
-    private AbstractNPCState currentState;
+
+    private FiniteStateMachine<AbstractNPCState> stateMachine;
     
     public GunHandler Gun => gunHandler;
     public GunRotator GunRotator => gunRotator;
@@ -30,11 +30,21 @@ public class ShooterNPC : MonoBehaviour, IInputListener
     public void SetImmunity(bool immune) => lifeHandler.SetImmunity(immune);
     public void SetTouchable(bool isTouchable) => mainCollider.enabled = isTouchable;
     public void SetColor(Color newColor) => spriteRenderer.color = newColor;
+
+    public const string STATE_READY_TO_SHOT = "ReadyToShot";
+    public const string STATE_DEATH = "ReadyToShot";
+
+    private void SetupStateMachine()
+    {
+        stateMachine = new FiniteStateMachine<AbstractNPCState>();
+        stateMachine.RegisterState(STATE_READY_TO_SHOT, new NPCShootingState(this), true);
+        stateMachine.RegisterState(STATE_DEATH, new NPCDeathState(this));
+    }
     
     protected virtual void Awake()
     {
+        SetupStateMachine();
         lifeHandler.OnDeath += OnDeath;
-        currentState = new NPCShootingState(this);
         behavior.Setup(this);
     }
     
@@ -45,17 +55,16 @@ public class ShooterNPC : MonoBehaviour, IInputListener
 
     protected virtual void OnDeath()
     {
-        currentState = new NPCDeathState(this);
-        currentState.Apply();
+        stateMachine.ApplyState(STATE_DEATH);
     }
 
     #region IInputListener Implementation
-    public void ShootStarted() => currentState.ShootStarted();
-    public void ShootReleased() => currentState.ShootReleased();
-    public void Roll() => currentState.Roll();
-    public void Reload() => currentState.Reload();
-    public void Move(Vector2 axis) => currentState.Move(axis);
-    public void ListenAim(Vector2 aimPosition) => currentState.ListenAim(aimPosition);
+    public void ShootStarted() => stateMachine.CurrentState.ShootStarted();
+    public void ShootReleased() => stateMachine.CurrentState.ShootReleased();
+    public void Roll() => stateMachine.CurrentState.Roll();
+    public void Reload() => stateMachine.CurrentState.Reload();
+    public void Move(Vector2 axis) => stateMachine.CurrentState.Move(axis);
+    public void ListenAim(Vector2 aimPosition) => stateMachine.CurrentState.ListenAim(aimPosition);
 
     #endregion
 }

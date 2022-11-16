@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class AbstractNPCState : IInputListener
+public abstract class AbstractNPCState : IFiniteState, IInputListener
 {
     protected AbstractNPCState(ShooterNPC owner)
     {
@@ -9,7 +9,7 @@ public abstract class AbstractNPCState : IInputListener
     
     protected ShooterNPC Owner { get; }
 
-    public abstract void Apply();
+    public abstract void OnStateApply();
     public abstract void ShootStarted();
     public abstract void ShootReleased();
     public abstract void Roll();
