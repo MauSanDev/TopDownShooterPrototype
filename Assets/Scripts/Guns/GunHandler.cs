@@ -45,7 +45,11 @@ public class GunHandler : MonoBehaviour
         DefineStates();
     }
 
-    public void TransitionToState(string stateId) => stateMachine.ApplyState(stateId);
+    public void TransitionToState(string stateId)
+    {
+        ReleaseShot();
+        stateMachine.ApplyState(stateId);
+    }
 
     public bool IsReloading => stateMachine.CurrentStateId is STATE_RELOADING;
     
