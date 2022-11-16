@@ -35,8 +35,8 @@ public class GunHandler : MonoBehaviour
         
         shootingStrategy.Setup(this);
         stateMachine.RegisterState(STATE_READY_TO_SHOT, shootingStrategy, true);
-        stateMachine.RegisterState(STATE_RELOADING, new GunReloadingState(this), true);
-        stateMachine.RegisterState(STATE_EMPTY, new GunEmptyState(this), true);
+        stateMachine.RegisterState(STATE_RELOADING, new GunReloadingState(this));
+        stateMachine.RegisterState(STATE_EMPTY, new GunEmptyState(this));
     }
 
     private void Awake()
