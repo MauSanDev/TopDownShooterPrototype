@@ -27,14 +27,11 @@ public class LifeHandler : MonoBehaviour, IHitListener
         hitDamageTimer.Update(Time.deltaTime);
     }
 
+    private bool CanReceiveDamage => hitDamageTimer.Finished;
+
     private void AddDamage(int amount = 1)
     {
-        if (isImmune)
-        {
-            Debug.Log($"{gameObject.name} is immune and can't take damage'");
-        }
-        
-        if(!IsAlive || isImmune) return;
+        if(!IsAlive || isImmune || !CanReceiveDamage) return;
 
         lifePoints -= amount;
         
@@ -57,7 +54,6 @@ public class LifeHandler : MonoBehaviour, IHitListener
         {
             hitDamageTimer.SetTime(lifeHitCollider.DamageCooldown);
             
-            if(!hitDamageTimer.Finished) return;
             AddDamage();
             hitDamageTimer.ResetTimer();
         }
