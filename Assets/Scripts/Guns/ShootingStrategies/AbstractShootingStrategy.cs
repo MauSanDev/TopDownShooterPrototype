@@ -11,22 +11,21 @@ public abstract class AbstractShootingStrategy : MonoBehaviour, IGunState
         CooldownTimer = new MiniTimer(cooldownBetweenShots);
     }
     
-    public GunHandler GunHandler { get; set; }
+    public GunHandler Gun { get; set; }
 
     public void Setup(GunHandler gunHandler)
     {
-        GunHandler = gunHandler;
-        RefreshState();
+        Gun = gunHandler;
     }
 
     public void UpdateState(float deltaTime)
     {
         CooldownTimer.Update(deltaTime);
     }
-    
-    public void RefreshState()
+
+    public void OnStateApply()
     {
-        GunHandler.Cartridge.Reload();
+        Gun.Cartridge.Reload();
     }
 
     public void OnActionReleased() => OnShotEnd();

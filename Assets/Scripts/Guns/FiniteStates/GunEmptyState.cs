@@ -2,15 +2,17 @@
 
 public class GunEmptyState : AbstractGunState
 {
+    public GunEmptyState(GunHandler gun) : base(gun) { }
+    
     public override void UpdateState(float deltaTime) { }
 
-    public override void RefreshState() { }
+    public override void OnStateApply() { }
 
     public override void OnActionExecuted()
     {
-        if (GunHandler.Cartridge.HasBulletsToLoad)
+        if (Gun.Cartridge.HasBulletsToLoad)
         {
-            GunHandler.TransitionToState(GunHandler.GunStates.Reloading);
+            Gun.TransitionToState(GunHandler.STATE_RELOADING);
         }
         else
         {
@@ -19,4 +21,5 @@ public class GunEmptyState : AbstractGunState
     }
 
     public override void OnActionReleased() { }
+
 }

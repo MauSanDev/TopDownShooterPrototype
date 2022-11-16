@@ -1,9 +1,7 @@
-﻿public interface IGunState
+﻿public interface IGunState : IFiniteState
 {
-    GunHandler GunHandler { get; set; }
+    GunHandler Gun { get; set; }
     void UpdateState(float deltaTime);
-    void RefreshState();
-    void Setup(GunHandler gunHandler);
     void OnActionExecuted();
     void OnActionReleased();
 }

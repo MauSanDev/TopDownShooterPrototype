@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class GunReloadingState : AbstractGunState
 {
-    public GunReloadingState(float timer)
+    public GunReloadingState(GunHandler gun) : base(gun)
     {
-        refillTimer = new MiniTimer(timer);
+        refillTimer = new MiniTimer(gun.ReloadCooldown);
         refillTimer.OnTimeFinished += OnRefillCompleted;
         refillTimer.OnUpdate += OnRefilling;
     }
-
+    
     private MiniTimer refillTimer;
 
     private void OnRefilling()
@@ -20,7 +20,7 @@ public class GunReloadingState : AbstractGunState
     private void OnRefillCompleted()
     {
         Debug.Log("Bullets Refilled");
-        GunHandler.TransitionToState(GunHandler.GunStates.ReadyToShot);
+        Gun.TransitionToState(GunHandler.STATE_READY_TO_SHOT);
     }
     
     public override void UpdateState(float deltaTime)
@@ -28,7 +28,7 @@ public class GunReloadingState : AbstractGunState
         refillTimer.Update(deltaTime);
     }
 
-    public override void RefreshState()
+    public override void OnStateApply()
     {
         refillTimer.ResetTimer();
     }

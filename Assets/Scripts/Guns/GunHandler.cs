@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GunHandler : MonoBehaviour
@@ -12,10 +11,12 @@ public class GunHandler : MonoBehaviour
     [SerializeField] private int totalBullets = 10;
     [SerializeField] private AbstractShootingStrategy shootingStrategy;
     [SerializeField][Range(1,10)] private float precisionMargin = 1.4f;
-    
-    private Dictionary<GunStates, IGunState> gunStates = new Dictionary<GunStates, IGunState>();
+
+    private FiniteStateMachine<IGunState> stateMachine;
 
     private bool isShooting = false;
+
+    public float ReloadCooldown => reloadCooldown;
 
     public Transform Muzzle => gunMuzzle;
     
@@ -23,62 +24,51 @@ public class GunHandler : MonoBehaviour
 
     public float BulletSpeed => bulletSpeed;
     public float PrecisionMargin => precisionMargin;
+
+    public const string STATE_READY_TO_SHOT = "ReadyToShot";
+    public const string STATE_RELOADING = "Reloading";
+    public const string STATE_EMPTY = "Empty";
     
-    public enum GunStates
-    {
-        ReadyToShot,
-        Reloading,
-        Empty
-    }
-
-    private IGunState CurrentState { get; set; }
-
     private void DefineStates()
     {
-        gunStates = new Dictionary<GunStates, IGunState>()
-        {
-            {GunStates.ReadyToShot, shootingStrategy},
-            {GunStates.Reloading, new GunReloadingState(reloadCooldown)},
-            {GunStates.Empty, new GunEmptyState()}
-        };
+        stateMachine = new FiniteStateMachine<IGunState>();
+        
+        shootingStrategy.Setup(this);
+        stateMachine.RegisterState(STATE_READY_TO_SHOT, shootingStrategy, true);
+        stateMachine.RegisterState(STATE_RELOADING, new GunReloadingState(this), true);
+        stateMachine.RegisterState(STATE_EMPTY, new GunEmptyState(this), true);
     }
 
     private void Awake()
     {
         Cartridge = new GunCartridge(bulletsPerCartridge, totalBullets);
-
         DefineStates();
-        TransitionToState(GunStates.ReadyToShot);
     }
 
-    public void TransitionToState(GunStates newState)
-    {
-        CurrentState = gunStates[newState];
-        CurrentState.Setup(this);
-    }
+    public void TransitionToState(string stateId) => stateMachine.ApplyState(stateId);
 
-    public bool IsCharging => CurrentState is GunReloadingState;
+    public bool IsReloading => stateMachine.CurrentStateId is STATE_RELOADING;
     
     private void Update()
     {
-        CurrentState.UpdateState(Time.deltaTime);
+        stateMachine.CurrentState.UpdateState(Time.deltaTime);
 
         if (isShooting)
         {
-            CurrentState.OnActionExecuted();
+            stateMachine.CurrentState.OnActionExecuted();
         }
     }
 
     public void ShotGun()
     {
-        CurrentState.OnActionExecuted();
+        stateMachine.CurrentState.OnActionExecuted();
         isShooting = true;
     }
 
     public void ReleaseShot()
     {
         isShooting = false;
-        CurrentState.OnActionReleased();
+        stateMachine.CurrentState.OnActionReleased();
     }
 
     public void SetAimDirection(Vector2 aimPosition)

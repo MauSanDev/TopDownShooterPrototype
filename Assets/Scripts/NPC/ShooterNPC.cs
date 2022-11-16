@@ -32,7 +32,7 @@ public class ShooterNPC : MonoBehaviour, IInputListener
     public void SetColor(Color newColor) => spriteRenderer.color = newColor;
 
     public const string STATE_READY_TO_SHOT = "ReadyToShot";
-    public const string STATE_DEATH = "ReadyToShot";
+    public const string STATE_DEATH = "Dead";
 
     private void SetupStateMachine()
     {

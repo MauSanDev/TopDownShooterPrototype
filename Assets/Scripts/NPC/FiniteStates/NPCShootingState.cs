@@ -12,7 +12,7 @@ public class NPCShootingState : AbstractNPCState
     public override void ShootStarted() => Owner.Gun.ShotGun();
     public override void ShootReleased() => Owner.Gun.ReleaseShot();
     public override void Roll() => Owner.StartCoroutine(RollRoutine());
-    public override void Reload() => Owner.Gun.TransitionToState(GunHandler.GunStates.Reloading);
+    public override void Reload() => Owner.Gun.TransitionToState(GunHandler.STATE_RELOADING);
 
     public override void Move(Vector2 axis)
     {

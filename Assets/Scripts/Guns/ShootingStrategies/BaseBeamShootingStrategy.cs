@@ -9,23 +9,23 @@ public class BaseBeamShootingStrategy : AbstractShootingStrategy, ILifeHitCollid
     {
         if (CooldownTimer.Finished)
         {
-            GunHandler.Cartridge.Consume();
+            Gun.Cartridge.Consume();
             CooldownTimer.ResetTimer();
         }
 
         ExecuteShot();
         
-        if (!GunHandler.Cartridge.HasBulletsToShot)
+        if (!Gun.Cartridge.HasBulletsToShot)
         {
             OnShotEnd();
-            GunHandler.TransitionToState(GunHandler.GunStates.Empty);
+            Gun.TransitionToState(GunHandler.STATE_EMPTY);
         }
     }
 
     protected override void ExecuteShot()
     {
-        Vector3 muzzlePosition = GunHandler.Muzzle.position;
-        Vector3 direction = GunHandler.AimDirection;
+        Vector3 muzzlePosition = Gun.Muzzle.position;
+        Vector3 direction = Gun.AimDirection;
         
         RaycastHit2D hit = Physics2D.Raycast(muzzlePosition, direction);
         lineRenderer.SetPosition(0, muzzlePosition);
@@ -55,4 +55,5 @@ public class BaseBeamShootingStrategy : AbstractShootingStrategy, ILifeHitCollid
     }
 
     public float DamageCooldown => beamDamageCooldown;
+
 }

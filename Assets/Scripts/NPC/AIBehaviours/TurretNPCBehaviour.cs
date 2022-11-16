@@ -20,12 +20,12 @@ public class TurretNPCBehaviour : AbstractNPCBehaviour
         Owner.GunRotator.RotateGun(targetPosition);
         Owner.Gun.SetAimDirection(targetPosition);
 
-        if(Owner.Gun.IsCharging)
+        if(Owner.Gun.IsReloading)
             return;
         
         if (Owner.Gun.Cartridge.ShouldBeCharged)
         {
-            Owner.Gun.TransitionToState(GunHandler.GunStates.Reloading);
+            Owner.Gun.TransitionToState(GunHandler.STATE_RELOADING);
             return;
         }
         
