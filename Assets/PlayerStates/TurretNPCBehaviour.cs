@@ -1,8 +1,8 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ShootAfterTimeEnemyBehaviour", menuName = "Enemy Behaviors/Shoot After Time Behaviour")]
-public class ShootAfterTimeEnemyBehaviour : AbstractEnemyBehaviour
+public class TurretNPCBehaviour : AbstractNPCBehaviour
 {
+    [SerializeField] private Transform target = null;
     [SerializeField] private float shotAfterTime = 2f;
     private MiniTimer shotTimer;
 
@@ -11,16 +11,19 @@ public class ShootAfterTimeEnemyBehaviour : AbstractEnemyBehaviour
         shotTimer = new MiniTimer(shotAfterTime);
     }
 
-    public override void Update()
+    public void Update()
     {
         shotTimer.Update(Time.deltaTime);
+
+        Vector3 targetPosition = target.position;
         
-        Owner.Gun.SetAimDirection(Target.position);
+        Owner.GunRotator.RotateGun(targetPosition);
+        Owner.Gun.SetAimDirection(targetPosition);
 
         if(Owner.Gun.IsCharging)
             return;
         
-        if (ShouldChargeGun)
+        if (Owner.Gun.Cartridge.ShouldBeCharged)
         {
             Owner.Gun.TransitionToState(GunHandler.GunStates.Reloading);
             return;
@@ -33,5 +36,4 @@ public class ShootAfterTimeEnemyBehaviour : AbstractEnemyBehaviour
             shotTimer.ResetTimer();
         }
     }
-
 }

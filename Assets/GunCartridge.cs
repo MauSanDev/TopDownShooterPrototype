@@ -4,12 +4,13 @@ public class GunCartridge
 {
     private AmountStack cartridgeBullets;
     private AmountStack totalBullets;
-    
+
     public bool HasBulletsToShot => cartridgeBullets.RemainingAmount > 0;
     public bool HasBulletsToLoad => totalBullets.RemainingAmount > 0;
+    public bool IsCartridgeFull => cartridgeBullets.IsFull || totalBullets.IsFull;
 
-    public bool IsCartridgeFull => cartridgeBullets.IsFull || totalBullets.IsEmpty;
-    
+    public bool ShouldBeCharged => HasBulletsToLoad && !HasBulletsToShot;
+
     public GunCartridge(int bulletsPerCartridge, int totalBullets)
     {
         this.totalBullets = new AmountStack(totalBullets);
