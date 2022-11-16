@@ -4,6 +4,11 @@ public class GunCartridge
 {
     private AmountStack cartridgeBullets;
     private AmountStack totalBullets;
+    
+    public int CartridgeCapacity => cartridgeBullets.TotalCapacity;
+    public int RemainingBullets => cartridgeBullets.RemainingAmount;
+    public int TotalRemainingBullets => cartridgeBullets.RemainingAmount + totalBullets.RemainingAmount;
+    public int TotalBullets => totalBullets.TotalCapacity;
 
     public bool HasBulletsToShot => cartridgeBullets.RemainingAmount > 0;
     public bool HasBulletsToLoad => totalBullets.RemainingAmount > 0;
