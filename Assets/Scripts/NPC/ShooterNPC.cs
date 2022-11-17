@@ -11,20 +11,21 @@ public class ShooterNPC : MonoBehaviour, IInputListener
     [SerializeField] protected LifeHandler lifeHandler = null;
     [SerializeField] protected Collider2D mainCollider = null;
     [SerializeField] protected SpriteRenderer spriteRenderer = null;
-    [SerializeField] protected GunHandler gunHandler = null;
     [SerializeField] protected GunRotator gunRotator = null;
+    [SerializeField] protected GunStackHandler gunStack = null;
 
     [Header("Properties")]
     [SerializeField] protected float movementSpeed = 10;
     [SerializeField] private float rollSpeed = 10;
     [SerializeField] private float rollDistance = 5f;
     
-    [Header("IA")]
+    [Header("AI")]
     [SerializeField] private AbstractNPCBehaviour behavior;
 
     private FiniteStateMachine<AbstractNPCState> stateMachine;
-    
-    public GunHandler Gun => gunHandler;
+
+    public GunStackHandler GunStack => gunStack;
+    public GunHandler Gun => gunStack.CurrentGun;
     public GunRotator GunRotator => gunRotator;
     public float MovementSpeed => movementSpeed;
     public float RollSpeed => rollSpeed;

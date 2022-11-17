@@ -5,20 +5,19 @@ using UnityEngine.UI;
 
 public class GunUIWidget : MonoBehaviour
 {
-    [SerializeField] private GunHandler gunHandler;
     [SerializeField] private List<Image> bulletIcons;
     [SerializeField] private TextMeshProUGUI label;
-    
-    private void UpdateLabel() => label.text = gunHandler.Cartridge.TotalRemainingBullets + "/" + gunHandler.Cartridge.TotalBullets;
 
-    void Update()
+    private void UpdateLabel(GunCartridge cartridge) => label.text = cartridge.TotalRemainingBullets + "/" + cartridge.TotalBullets;
+
+    public void OnGunUpdate(GunCartridge cartridge)
     {
-        UpdateLabel();
-        int bulletCartridge = gunHandler.Cartridge.RemainingBullets;
+        UpdateLabel(cartridge);
+        int bulletCartridge = cartridge.RemainingBullets;
 
         for (int i = 0; i < bulletIcons.Count; i++)
         {
-            bulletIcons[gunHandler.Cartridge.CartridgeCapacity-i-1].color = bulletCartridge > i ? Color.white : Color.gray;
+            bulletIcons[cartridge.CartridgeCapacity-i-1].color = bulletCartridge > i ? Color.white : Color.gray;
         }
     }
 }

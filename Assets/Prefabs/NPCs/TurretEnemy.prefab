@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 3846540483987530557}
   - component: {fileID: 3846540483987530559}
   - component: {fileID: 3846540483987530556}
+  - component: {fileID: 1022519936331502369}
   - component: {fileID: 3846540483987530552}
   - component: {fileID: 3846540483987530553}
   m_Layer: 0
@@ -178,8 +179,8 @@ MonoBehaviour:
   lifeHandler: {fileID: 3846540483987530559}
   mainCollider: {fileID: 3846540483987530553}
   spriteRenderer: {fileID: 3846540483109554686}
-  gunHandler: {fileID: 2321889215197084870}
   gunRotator: {fileID: 3846540483224871998}
+  gunStack: {fileID: 1022519936331502369}
   movementSpeed: 10
   rollSpeed: 10
   rollDistance: 5
@@ -215,6 +216,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   shotAfterTime: 0.1
+--- !u!114 &1022519936331502369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3846540483987530554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8528866923f13c54ea12fc870732348d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunStack:
+  - {fileID: 2321889215197084870}
+  gunContainer: {fileID: 3846540483224871999}
 --- !u!50 &3846540483987530552
 Rigidbody2D:
   serializedVersion: 4

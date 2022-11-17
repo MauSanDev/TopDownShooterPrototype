@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class GunCartridge
 {
     private AmountStack cartridgeBullets;
     private AmountStack totalBullets;
+
+    public event Action<GunCartridge> OnGunUpdate;
     
     public int CartridgeCapacity => cartridgeBullets.TotalCapacity;
     public int RemainingBullets => cartridgeBullets.RemainingAmount;
@@ -26,6 +29,7 @@ public class GunCartridge
     public void Consume(int amount = 1)
     {
         cartridgeBullets.Substract(amount);
+        TriggerUpdateEvent();
         Debug.Log($"Remaining :: Cartridge: {cartridgeBullets} - Total {totalBullets}");
     }
 
@@ -33,7 +37,10 @@ public class GunCartridge
     {
         int toLoad = totalBullets.Substract(cartridgeBullets.Difference);
         cartridgeBullets.Add(toLoad);
+        TriggerUpdateEvent();
     }
+
+    private void TriggerUpdateEvent() => OnGunUpdate?.Invoke(this);
 }
 
 public class AmountStack

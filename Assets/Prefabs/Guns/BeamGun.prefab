@@ -291,7 +291,7 @@ MonoBehaviour:
   gunMuzzle: {fileID: 1538165917653897371}
   bulletSpeed: 20
   reloadCooldown: 1
-  bulletsPerCartridge: 100
+  bulletsPerCartridge: 10
   totalBullets: 500
   shootingStrategy: {fileID: 1538165919099284484}
   precisionMargin: 4.82
@@ -308,4 +308,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownBetweenShots: 0.2
+  beamDamageCooldown: 0.1
   lineRenderer: {fileID: 1538165918459948103}
